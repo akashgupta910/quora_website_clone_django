@@ -1,0 +1,170 @@
+{% extends 'MainApp/layout.html' %}
+
+{% block style %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'MainApp/css/login_signup.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 m-auto mb-0" id="alerts-msg">
+            {% if messages %}
+            <div class="container">
+                {% for msg in messages %}
+                <div class="my-4 alert alert-{{ msg.tags }} alert-dismissible fade show" id="main-alert" role="alert"
+                    style="box-shadow: -1px 0 7px 6px rgba(0, 0, 0, 0.1);">
+                    {{ msg }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<section id="login">
+    <div class="container">
+        <div class="row">
+            <dov class="col-md-6 m-auto">
+                <div class="card">
+                    <h1>Discus Questions</h1>
+                    <p class="desc">A place to gain and share knowledge.</p>
+                    <h3>Login</h3>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="field">
+                            <input type="text" name="email" class="form-control" id="login-email" placeholder="Email">
+                            <i class="fa fa-times-circle-o input-eraser" id="login-email-cross" aria-hidden="true"></i>
+                            <p class="alert" id="login-email-alert"></p>
+                        </div>
+
+                        <div class="field">
+                            <input type="password" name="password" class="form-control" id="login-password"
+                                placeholder="Password">
+                            <i class="fa fa-times-circle-o input-eraser" id="login-password-cross"
+                                aria-hidden="true"></i>
+                            <p class="alert" id="login-password-alert"></p>
+                        </div>
+
+                        <a href="{% url 'forget_pass_page' %}" class="float-left ml-1 my-2">Forget Password?</a>
+                        <button type="submit" id="login-btn" class="btn float-right">Login</button>
+                    </form>
+                    <p style="font-size: 15px;" class="mt-2 text-muted">Don't have an account? <a
+                            href="{% url 'register_page' %}" class="account">Create an Account</a></p>
+
+                    <div class="seo-desc mt-3">
+                        <p>
+                            <span><b>The web’s community of communities</b></span>
+                            <span class="mx-1">Discus Questions © 2019</span><br>
+                            <span class="pages">
+                                <a href="">About</a>
+                                <a href="">Contact</a>
+                                <a href="">Privacy Policy</a>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </dov>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+<script>
+
+    // Erase Input Field value when cross button clicked
+    (function Eraser() {
+
+        // Input Eraser - cross on right side of input field
+        let input_eraser = document.getElementsByClassName('input-eraser');
+
+        // Iterate all the input Eraser button
+        for (let i = 0; i < input_eraser.length; i++) {
+
+            // add click event to all eraser button
+            input_eraser[i].addEventListener('click', () => {
+
+                // Get the id of parent element of the input eraser button
+                let erase_elem = input_eraser[i].parentElement.children[0].id;
+
+                // Erase the value of input - erase elem
+                document.getElementById(erase_elem).value = "";
+            });
+        }
+    }())
+
+        // Login Form Validation
+        (function LoginFormValidation() {
+
+            // when click on login form submit button
+            document.getElementById('login-btn').addEventListener('click', (event) => {
+
+                // get the value of input fields
+                let emailFieldValue = document.getElementById('login-email').value;
+                let passwordFieldValue = document.getElementById('login-password').value;
+
+                // get the alert elements of all particular input fields
+                let emailFieldAlert = document.getElementById("login-email-alert");
+                let passwordFieldAlert = document.getElementById("login-password-alert");
+
+                // get the cross button of all particular input fields
+                let emailFieldEraser = document.getElementById('login-email-cross');
+                let passwordFieldEraser = document.getElementById('login-password-cross');
+
+                // Email Field Validation
+
+                let email_regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+                if (emailFieldValue == "") {
+                    emailFieldAlert.innerText = "This Field is Required!";
+                    emailFieldAlert.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (!(email_regex.test(emailFieldValue))) {
+                    emailFieldAlert.innerText = "Please Enter Valid Email Address.";
+                    emailFieldAlert.style.display = "block";
+                    emailFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+                else {
+                    emailFieldAlert.innerText = "";
+                    emailFieldAlert.style.display = "none";
+                    emailFieldEraser.style.display = "none";
+                }
+
+                // Password Field Validation
+
+                if (passwordFieldValue == "") {
+                    passwordFieldAlert.innerText = "This Field is Required!";
+                    passwordFieldAlert.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (passwordFieldValue.length < 8) {
+                    passwordFieldAlert.innerText = "Password must contain at least 8 characters.";
+                    passwordFieldAlert.style.display = "block";
+                    passwordFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (passwordFieldValue.length > 20) {
+                    passwordFieldAlert.innerText = "Password must be less than 20 characters.";
+                    passwordFieldAlert.style.display = "block";
+                    passwordFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+                else {
+                    passwordFieldAlert.innerText = "";
+                    passwordFieldAlert.style.display = "none";
+                    passwordFieldEraser.style.display = "none";
+                }
+            });
+        }())
+
+
+</script>
+{% endblock %}

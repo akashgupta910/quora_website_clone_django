@@ -1,0 +1,291 @@
+{% extends 'MainApp/layout.html' %}
+
+
+{% block style %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'MainApp/css/login_signup.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<div class="row">
+        <div class="col-md-6 m-auto mb-0" id="alerts-msg">
+            {% if messages %}
+            <div class="container">
+                {% for msg in messages %}
+                <div class="my-4 alert alert-{{ msg.tags }} alert-dismissible fade show" id="main-alert"
+                    role="alert" style="box-shadow: -1px 0 7px 6px rgba(0, 0, 0, 0.1);">
+                    {{ msg }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<section id="signup">
+    <div class="container">
+    <div class="row">
+        <dov class="col-md-6 m-auto">
+            <div class="card">
+                <h1>Discus Questions</h1>
+                <p class="desc">A place to gain and share knowledge.</p>
+                <h3>Sign Up</h3>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="field">
+                        <input type="text" name="name" class="form-control" id="signup-name" placeholder="Full Name">
+                        <i class="fa fa-times-circle-o input-eraser" id="signup-name-cross" aria-hidden="true"></i>
+                        <p class="alert" id="signup-name-alert"></p>
+                    </div>
+
+                    <div class="field">
+                        <input type="text" name="username" class="form-control" id="signup-username"
+                            placeholder="Username">
+                        <i class="fa fa-times-circle-o input-eraser" id="signup-username-cross" aria-hidden="true"></i>
+                        <p class="alert" id="signup-username-alert"></p>
+                    </div>
+
+                    <div class="field">
+                        <input type="text" name="email" class="form-control" id="signup-email" placeholder="Email">
+                        <i class="fa fa-times-circle-o input-eraser" id="signup-email-cross" aria-hidden="true"></i>
+                        <p class="alert" id="signup-email-alert"></p>
+                    </div>
+
+                    <div class="field">
+                        <input type="password" name="password" class="form-control" id="signup-password"
+                            placeholder="Password">
+                        <i class="fa fa-times-circle-o input-eraser" id="signup-password-cross" aria-hidden="true"></i>
+                        <p class="alert" id="signup-password-alert"></p>
+                    </div>
+
+                    <div class="field">
+                        <input type="password" name="confirm_password" class="form-control" id="signup-confirm_password"
+                            placeholder="Confirm Password">
+                        <i class="fa fa-times-circle-o input-eraser" id="signup-confirm_password-cross"
+                            aria-hidden="true"></i>
+                        <p class="alert" id="signup-confirm_password-alert"></p>
+                    </div>
+
+                    <button type="submit" id="signup-btn" class="btn float-right">Sign Up</button>
+                </form>
+                <p style="font-size: 15px;" class="mt-2 text-muted">Already have an account? <a
+                        href="{% url 'login_page' %}" class="account">Login</a></p>
+
+                <div class="seo-desc mt-3">
+                    <p>
+                        <span><b>The web’s community of communities</b></span>
+                        <span class="mx-1">Discus Questions © 2019</span><br>
+                        <span class="pages">
+                            <a href="">About</a>
+                            <a href="">Contact</a>
+                            <a href="">Privacy Policy</a>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </dov>
+    </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+<script>
+
+    // Erase Input Field value when cross button clicked
+    (function Eraser() {
+
+        // Input Eraser - cross on right side of input field
+        let input_eraser = document.getElementsByClassName('input-eraser');
+
+        // Iterate all the input Eraser button
+        for (let i = 0; i < input_eraser.length; i++) {
+
+            // add click event to all eraser button
+            input_eraser[i].addEventListener('click', () => {
+
+                // Get the id of parent element of the input eraser button
+                let erase_elem = input_eraser[i].parentElement.children[0].id;
+
+                // Erase the value of input - erase elem
+                document.getElementById(erase_elem).value = "";
+            });
+        }
+    }())
+
+        // Sign Up Form Validation
+        (function SignupFormValidation() {
+
+            // when click on login form submit button
+            document.getElementById('signup-btn').addEventListener('click', (event) => {
+
+                // get the value of input fields
+                let nameFieldValue = document.getElementById('signup-name').value;
+                let usernameFieldValue = document.getElementById('signup-username').value;
+                let emailFieldValue = document.getElementById('signup-email').value;
+                let passwordFieldValue = document.getElementById('signup-password').value;
+                let confirmPasswordFieldValue = document.getElementById('signup-confirm_password').value;
+
+                // get the alert elements of all particular input fields
+                let nameFieldAlert = document.getElementById('signup-name-alert');
+                let usernameFieldAlert = document.getElementById('signup-username-alert');
+                let emailFieldAlert = document.getElementById("signup-email-alert");
+                let passwordFieldAlert = document.getElementById("signup-password-alert");
+                let conformPasswordFieldAlert = document.getElementById("signup-confirm_password-alert");
+
+                // get the cross button of all particular input fields
+                let nameFieldEraser = document.getElementById('signup-name-cross');
+                let usernameFieldEraser = document.getElementById('signup-username-cross');
+                let emailFieldEraser = document.getElementById('signup-email-cross');
+                let passwordFieldEraser = document.getElementById('signup-password-cross');
+                let conformPasswordFieldEraser = document.getElementById("signup-confirm_password-cross");
+
+                // Name Field Validation
+
+                let name_regex = /^[A-Za-z ]{5,20}$/i;
+
+                if (nameFieldValue == "") {
+                    nameFieldAlert.innerText = "This Field is Required!";
+                    nameFieldAlert.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (nameFieldValue.length < 5) {
+                    nameFieldAlert.innerText = "Name must contain at least 5 characters.";
+                    nameFieldAlert.style.display = "block";
+                    nameFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (nameFieldValue.length > 20) {
+                    nameFieldAlert.innerText = "Name must be less than 20 characters.";
+                    nameFieldAlert.style.display = "block";
+                    nameFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (!(name_regex.test(nameFieldValue))) {
+                    nameFieldAlert.innerText = "Name must be only contain alphabets.";
+                    nameFieldAlert.style.display = "block";
+                    nameFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else {
+                    nameFieldAlert.innerText = "";
+                    nameFieldAlert.style.display = "none";
+                    nameFieldEraser.style.display = "none";
+                }
+
+                // Username Field Validation
+
+                let username_regex = /^[A-Za-z0-9!@#$%&.]{5,20}$/i;
+
+                if (usernameFieldValue == "") {
+                    usernameFieldAlert.innerText = "This Field is Required!";
+                    usernameFieldAlert.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (usernameFieldValue.length < 5) {
+                    usernameFieldAlert.innerText = "Username must contain at least 5 characters.";
+                    usernameFieldAlert.style.display = "block";
+                    usernameFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (usernameFieldValue.length > 20) {
+                    usernameFieldAlert.innerText = "Username must be less than 20 characters.";
+                    usernameFieldAlert.style.display = "block";
+                    usernameFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (!(username_regex.test(usernameFieldValue))) {
+                    usernameFieldAlert.innerText = "Username only contains alphabets, number and some special characters.";
+                    usernameFieldAlert.style.display = "block";
+                    usernameFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else {
+                    usernameFieldAlert.innerText = "";
+                    usernameFieldAlert.style.display = "none";
+                    usernameFieldEraser.style.display = "none";
+                }
+
+
+                // Email Field Validation
+
+                let email_regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+                if (emailFieldValue == "") {
+                    emailFieldAlert.innerText = "This Field is Required!";
+                    emailFieldAlert.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (!(email_regex.test(emailFieldValue))) {
+                    emailFieldAlert.innerText = "Please Enter Valid Email Address.";
+                    emailFieldAlert.style.display = "block";
+                    emailFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+                else {
+                    emailFieldAlert.innerText = "";
+                    emailFieldAlert.style.display = "none";
+                    emailFieldEraser.style.display = "none";
+                }
+
+                // Password Field Validation
+
+                if (passwordFieldValue == "") {
+                    passwordFieldAlert.innerText = "This Field is Required!";
+                    passwordFieldAlert.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (passwordFieldValue.length < 8) {
+                    passwordFieldAlert.innerText = "Password must contain at least 8 characters.";
+                    passwordFieldAlert.style.display = "block";
+                    passwordFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (passwordFieldValue.length > 20) {
+                    passwordFieldAlert.innerText = "Password must be less than 20 characters.";
+                    passwordFieldAlert.style.display = "block";
+                    passwordFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+                else {
+                    passwordFieldAlert.innerText = "";
+                    passwordFieldAlert.style.display = "none";
+                    passwordFieldEraser.style.display = "none";
+                }
+
+                // Confirm Password Field Validation
+
+                if (confirmPasswordFieldValue == "") {
+                    conformPasswordFieldAlert.innerText = "This Field is Required!";
+                    conformPasswordFieldAlert.style.display = "block";
+                    event.preventDefault();
+                }
+                else if (confirmPasswordFieldValue != passwordFieldValue) {
+                    conformPasswordFieldAlert.innerText = "Password do not match!";
+                    conformPasswordFieldAlert.style.display = "block";
+                    conformPasswordFieldEraser.style.display = "block";
+                    event.preventDefault();
+                }
+                else {
+                    conformPasswordFieldAlert.innerText = "";
+                    conformPasswordFieldAlert.style.display = "none";
+                    conformPasswordFieldEraser.style.display = "none";
+                }
+            });
+        }())
+
+
+</script>
+{% endblock %}

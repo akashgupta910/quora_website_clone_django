@@ -1,0 +1,329 @@
+.user-profile .card
+{
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/media/Images/bg_5.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-top: 50px;
+    margin-left: -5px;
+    padding-bottom: 160px;
+    color: #fff !important;
+    margin-bottom: 9em;
+}
+
+.user-profile .user-details 
+{
+    font-family: var(--font1);
+}
+
+.user-profile .user-details h2
+{
+    font-size: 68px;
+    font-family: var(--font1);
+    margin: 10px 0;
+}
+
+.user-profile .user-details h3
+{
+    font-size: 30px;
+    margin-bottom: 16px;
+}
+
+.user-profile .user-details .desc
+{
+    padding: 0 100px;
+    margin: 18px 0;
+}
+
+.user-profile .user-details #setting
+{
+    position: absolute;
+    left: 5%;
+    bottom: 4%;
+}
+
+.user-profile .user-details #setting button
+{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.user-profile .user-details #setting button .fa
+{
+    font-size: 20px;    
+    margin-left: -3px;
+}
+
+.user-profile .user-details p
+{
+    margin: 8px 0;
+}
+
+.user-profile .user-img
+{
+    width: 14em;
+    position: absolute;
+    left: 50%;
+    top: 80%;
+    transform: translate(-50%);
+}
+
+.user-profile .user-img img
+{
+    /* border-radius: 50%; */
+}
+
+.user-profile .user-img:hover .img-select-btn
+{
+    visibility: visible;
+}
+
+.user-profile .user-img .img-select-btn button
+{
+    background: #fff;
+    box-shadow: none !important;
+}
+
+.user-profile .user-details button
+{
+    background: var(--primaryColor);
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    outline: none;
+    box-shadow: -1px 0 7px 6px rgba(255, 255, 255, 0.05);
+}
+
+.user-img-inp
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.user-img-inp button
+{
+    background: #fff;
+    color: #333;
+    border: none;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    font-size: 25px;
+    outline: none;
+    box-shadow: -1px 0 3px 6px rgba(0, 0, 0, 0.4);
+    visibility: hidden;
+}
+
+.user-profile .user-img:hover .user-img-inp button
+{
+    visibility: visible;
+}
+
+.add-Question h1
+{
+    font-size: 24px;
+    font-family: var(--font1);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-Question .card-header
+{
+    padding: 5px 12px;
+    margin-bottom: 24px;
+}
+
+.add-Question input
+{
+    border-radius: 0;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.03);
+    border: none;
+    box-shadow: none !important;
+    font-family: var(--font2);
+}
+
+.add-Question input:focus
+{
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.add-Question textarea
+{
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.03);
+    border: none;
+    box-shadow: none !important;
+    font-family: var(--font2);
+    padding: 10px 12px;
+}
+
+.add-Question textarea:focus
+{
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.add-Question p
+{
+    margin-top: 10px;
+    margin-bottom: 22px;
+    font-size: 14px;
+    margin-left: 5px;
+    color: rgba(0, 0, 0, 0.6);    
+}
+
+.add-Question h3
+{
+    font-size: 14px;
+    margin-left: 5px;
+    font-family: var(--font2);
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.add-Question .categories ul
+{
+     display: flex;
+     flex-wrap: wrap;
+     margin-top: -70px;
+     list-style-type: none;
+}
+
+.add-Question .categories ul li
+{
+    margin: 5px 7px;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.add-Question button
+{
+    background: var(--primaryColor);
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    margin-left: 6px;
+}
+
+#alerts
+{
+    position: fixed;
+    bottom: 3%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 10;
+    display: none;
+}
+
+#alerts .alert
+{
+    border: none;
+    border-radius: 0;
+    box-shadow: -1px 0 7px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-title, .modal-body
+{   
+    color: #333 !important;
+}
+
+.modal .close
+{
+    background: #fff !important;
+    color: #333 !important;
+}
+
+.modal-body input, .modal-body textarea
+{
+    border-radius: 0;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.03);
+    border: none;
+    box-shadow: none !important;
+    font-family: var(--font2);
+    margin: 10px 0;
+}
+
+.modal-body input:focus, .modal-body textarea:focus
+{
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.modal-body textarea
+{
+    height: 100px;
+}
+
+.modal-body button
+{
+    float: right;
+    margin-top: 50px;
+    border-radius: 0;
+}
+
+#uintested-popup .card
+{
+    position: fixed;
+    top: 10%;
+    left: 30%;
+}
+
+.modal-title
+{
+    font-family: var(--font1);
+}
+
+#topics
+{
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    margin: 10px 0;
+    font-family: var(--font2);
+}
+
+#topics li
+{
+    margin: 8px;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 5px 10px;
+    box-shadow: -1px 0 6px -1px var(--primaryColor);
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.modal-body button
+{
+    background: var(--primaryColor);
+    color: #fff;
+    box-shadow: none !important;
+    border: none;
+    padding: 10px 20px;
+    font-family: var(--font2);
+}
+
+.modal-body button:hover
+{
+    color: #fff;
+}
+
+.option
+{
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    font-family: var(--font1);
+}
+
+.option button
+{
+    box-shadow: none !important;
+}

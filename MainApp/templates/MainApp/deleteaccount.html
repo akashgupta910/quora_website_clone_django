@@ -1,0 +1,89 @@
+{% extends 'MainApp/layout.html' %}
+
+{% block style %}
+<style>
+    body {
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/media/Images/bg_1.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    #forget_pass {
+        margin-top: 5em;
+    }
+
+    #forget_pass .card {
+        border-radius: 0;
+        padding: 10px;
+        border: none;
+        box-shadow: -1px 0 7px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    #forget_pass .card-header {
+        background: #EA7773;
+        color: #fff;
+        border-radius: 0;
+        font-family: var(--font1);
+        font-size: 18px;
+    }
+
+    #forget_pass input {
+        margin: 20px 0;
+        border-radius: 0;
+        height: 50px;
+        box-shadow: none !important;
+        font-family: var(--font2);
+        font-size: 17px;
+    }
+
+    #forget_pass button {
+        background: transparent;
+        padding: 6px 12px;
+        color: #EA7773;
+        border: none;
+        border: 1px solid #EA7773;
+        border-radius: 5px;
+        font-family: var(--font2);
+        margin: 6px 0;
+        float: right;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 m-auto mb-0" id="alerts-msg">
+            {% if messages %}
+            <div class="container">
+                {% for msg in messages %}
+                <div class="my-4 alert alert-{{ msg.tags }} alert-dismissible fade show" id="main-alert" role="alert"
+                    style="box-shadow: -1px 0 7px 6px rgba(0, 0, 0, 0.1);">
+                    {{ msg }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<section id="forget_pass">
+    <div class="row">
+        <div class="col-md-6 m-auto">
+            <div class="card">
+                <div class="card-header">Password Reset</div>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="text" class="form-control" placeholder="Enter your Account Password" name="password">
+                    <button type="submit">Delete Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

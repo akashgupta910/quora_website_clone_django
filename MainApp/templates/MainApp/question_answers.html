@@ -1,0 +1,423 @@
+{% extends 'MainApp/layout.html' %}
+
+{% block style %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'MainApp/css/question_answers.css' %}">
+{% endblock %}
+
+{% block content %}
+<section id="main" class="mt-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+                <div class="card box">
+                    <div class="row">
+                        <div class="col-md-1 profile">
+                            <div class="media">
+                                <a href="/profile/{{data.user.username}}"><img
+                                        src="/media/{{ data.user.user_img }}"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-11 content">
+                            {% if question.title|slice:"-1:" == "?" %}
+                            <h1>{{data.title}}</h1>
+                            {% else %}
+                            <h1>{{data.title}} ?</h1>
+                            {% endif %}
+                            <p>{{ data.description }}</p>
+                            <!-- <div class="upvote">
+                                <button title="Like"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <span
+                                        class="likes">100</span></button>
+                            </div> -->
+                            <div class="detail">
+                                <div class="list">
+                                    <div class="views"><i class="fa fa-eye" aria-hidden="true"></i> {{ data.views }}
+                                    </div>
+                                    <div class="posted-at"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        {{ data.date_posted }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div id="alerts-msg">
+                        {% if messages %}
+                        {% for msg in messages %}
+                        <div class="my-4 alert alert-{{ msg.tags }} alert-dismissible fade show" id="main-alert"
+                            role="alert" style="box-shadow: -1px 0 7px 6px rgba(0, 0, 0, 0.1);">
+                            {{ msg }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card box" id="submit-answer">
+                    <div class="card-header">
+                        <h3>Submit your Answer</h3>
+                    </div>
+                    <div class="row">
+                        <div class="card-body submit-answer">
+                            <form action="/answer/{{data.url}}" method="GET">
+                                <textarea name="answer" class="form-control" rows="5"
+                                    placeholder="Write Your Answer"></textarea>
+                                <button type="submit" class="btn">Submit Answer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% if answer_len == 0 %}
+                <p>No Answers</p>
+                {% elif answer_len < 10 %}
+                <p>0{{answer_len}} Answer</p>
+                {% elif answer_len > 10 %}
+                <p>{{answer_len}} Answers</p>
+                {% endif %}
+
+                {% for answer in answer_data %}
+                <div id="answer">
+                    <div class="card box pt-4">
+                        <div class="row">
+                            <div class="col-md-1 profile">
+                                <div class="media">
+                                    <a href="/profile/{{answer.user.username}}"><img
+                                            src="/media/{{answer.user.user_img}}"></a>
+                                </div>
+                            </div>
+                            <div class="col-md-11 content">
+                                <p class="pr-4">{{answer.answer}}</p>
+                                <div class="detail">
+                                    <div class="list">
+                                        <div class="posted-at"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            {{answer.date_posted}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if login %}
+                            {% if answer.user.username == user_login.username %}
+                            <!-- ---------------- Option ---------------- -->
+                            <div class="option">
+                                <div class="dropdown">
+                                    <button class="btn text-muted" role="button" id="dropdownMenuLink"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <!-- Button trigger modal Edit Question -->
+                                        <a class="dropdown-item btn-primary" data-toggle="modal"
+                                            data-target="#exampleModalLong{{forloop.counter}}" href="#">Edit</a>
+
+                                        <a class="dropdown-item btn-danger" data-toggle="modal"
+                                            data-target="#exampleModal{{forloop.counter}}" href="">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div id="comment">
+                        <div class="card box">
+                            <div class="row">
+                                <div class="col-md-1 profile">
+                                    <div class="media">
+                                        {% if login %}
+                                        <a href="/profile/{{user_login.username}}"><img
+                                                src="/media/{{user_login.user_img}}"></a>
+                                        {% else %}
+                                        <a href="/profile/{{user_login.username}}"><img
+                                                src="/media/user_profile/user_default.png"></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-11 m-auto">
+                                    <form action="/comment/{{answer.id}}" method="GET">
+                                        <input type="text" name="comment" id="comment-inp"
+                                            placeholder="Add a Comment..." class="form-control">
+                                        <button type="submit" class="comment-btn btn"><i class="fa fa-paper-plane"
+                                                aria-hidden="true"></i></button>
+                                    </form>
+                                    <div id="all-comments">
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="card">
+                                                <div id="headingThree">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button"
+                                                            data-toggle="collapse"
+                                                            data-target="#collapseThree{{forloop.counter}}"
+                                                            aria-expanded="false" aria-controls="collapseThree">
+                                                            Show all Comments
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseThree{{forloop.counter}}"
+                                                    class="collapse comment-collapse" aria-labelledby="headingThree"
+                                                    data-parent="#accordionExample">
+
+                                                    {% for comment in comments %}
+                                                    {% if comment.answer_id == answer.id %}
+
+                                                    {% if comment.user.username == user_login.username %}
+                                                    <div class="card-body _comment">
+                                                        <div class="row">
+                                                            <div class="col-md-1 profile">
+                                                                <div class="media">
+                                                                    <a href="/profile/{{comment.user.username}}"><img
+                                                                            src="/media/{{comment.user.user_img}}"></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-11 content">
+                                                                <p class="m-0 mt-2 ml-3">{{comment}}</p>
+                                                                <p class="text-muted ml-3 mt-1"
+                                                                    style="font-size: 13px; font-weight: bold;">
+                                                                    {{comment.date_posted}}
+                                                                    <button class="btn btn-danger float-right"
+                                                                        style="font-size: 10px; box-shadow: none !important;" data-toggle="modal"
+                                                                        data-target="#exampleModalL{{forloop.counter}}">Delete</button>
+                                                                    <button class="btn btn-primary float-right"
+                                                                        style="font-size: 10px; box-shadow: none !important;"
+                                                                        data-toggle="modal"
+                                                                        data-target="#exampleModalLon{{forloop.counter}}">Edit</button>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Modal Edit Comment -->
+                                                    <div class="modal fade" id="exampleModalLon{{forloop.counter}}"
+                                                        tabindex="-1" role="dialog"
+                                                        aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLongTitle">
+                                                                        Edit Your Comment</h5>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form
+                                                                        action="/{{comment.question_url}}/editcomment/{{comment.id}}"
+                                                                        method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input style="border-radius: 0" type="text"
+                                                                            name="comment"
+                                                                            placeholder="Enter Your Comment"
+                                                                            value="{{comment.comment}}"
+                                                                            class="form-control w-100"
+                                                                            id="editcommentVal{{forloop.counter}}">
+
+                                                                        <button type="submit" class="btn mt-2"
+                                                                            id="{{forloop.counter}}"
+                                                                            style="background: var(--primaryColor); color: #fff;"
+                                                                            onclick="EditComment(this.id)">Save</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Modal Delete Comment -->
+                                                    <div class="modal fade" id="exampleModalL{{forloop.counter}}"
+                                                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Are
+                                                                        You sure want to delete ?</h5>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p style="font-family: var(--font1)"
+                                                                        class="text-muted">" {{comment.comment}} "</p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form
+                                                                        action="/{{comment.question_url}}/deletecomment/{{comment.id}}"
+                                                                        method="POST">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit"
+                                                                            class="btn btn-danger">Yes</button>
+                                                                    </form>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">No</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% else %}
+                                                    <div class="card-body _comment">
+                                                        <div class="row">
+                                                            <div class="col-md-1 profile">
+                                                                <div class="media">
+                                                                    <a href="/profile/{{comment.user.username}}"><img
+                                                                            src="/media/{{comment.user.user_img}}"></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-11 content">
+                                                                <p class="m-0 mt-2 ml-3">{{comment}}</p>
+                                                                <p class="text-muted ml-3 mt-1"
+                                                                    style="font-size: 13px; font-weight: bold;">
+                                                                    {{comment.date_posted}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+
+                                                    {% endif %}
+                                                    {% endfor %}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Edit Answer -->
+                <div class="modal fade" id="exampleModalLong{{forloop.counter}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Edit Answer</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/{{answer.question_url}}/editanswer/{{answer.id}}" method="POST">
+                                    {% csrf_token %}
+                                    <div style="display: none;">
+                                        class="px-3 py-3 mb-3 alert-warning form-alert" role="alert">
+
+                                    </div>
+                                    <textarea name="answer" id="editAnswerVal{{forloop.counter}}" rows="3"
+                                        class="form-control"
+                                        placeholder="Enter your Answer">{{answer.answer}}</textarea>
+
+                                    <button type="submit" class="btn mt-2" id="{{forloop.counter}}"
+                                        onclick="EditAnswer(this.id)">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Delete Answer -->
+                <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Are You sure want to delete ?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p style="font-family: var(--font1)" class="text-muted">" {{answer.answer}} "</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form action="/{{answer.question_url}}/deleteanswer/{{answer.id}}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {% endfor %}
+
+
+
+
+            </div>
+
+            <!-- ---------------- Category ---------------- -->
+            <div class="col-md-3">
+
+                <div class="info">
+                    <b>The web’s community of communities</b>
+                    <ul>
+                        <li>Discus Questions © 2019</li>
+                        <li><a href="">About</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+<script>
+
+    comment_btn = document.getElementsByClassName("comment-btn")
+
+    for (let i = 0; i < comment_btn.length; i++) {
+        comment_btn[i].addEventListener('click', (event) => {
+            let commentVal = comment_btn[i].parentElement.firstElementChild.value;
+
+            if (commentVal == "") {
+                event.preventDefault()
+            }
+
+        })
+    }
+
+    let commentCollapse = document.getElementsByClassName("comment-collapse");
+
+    for (let i = 0; i < commentCollapse.length; i++) {
+        if (commentCollapse[i].children.length == 0) {
+            commentCollapse[i].innerHTML = "Be the first person who comment on this post."
+            commentCollapse[i].className = "no_comment text-muted"
+        }
+    }
+
+    function EditAnswer(id) {
+
+        answerVal = document.getElementById("editAnswerVal" + id)
+        if (answerVal.value == "") {
+            event.preventDefault()
+        }
+        else if (answerVal.value.length > 700) {
+            event.preventDefault()
+        }
+    }
+
+    function EditComment(id) {
+        // event.preventDefault()
+        commentVal = document.getElementById("editcommentVal" + id)
+        // console.log(commentVal)
+        if (commentVal.value == "") {
+            event.preventDefault()
+        }
+        else if (commentVal.value.length > 250) {
+            event.preventDefault()
+        }
+    }
+</script>
+{% endblock %}

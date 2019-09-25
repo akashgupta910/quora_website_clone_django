@@ -1,0 +1,202 @@
+#submit-answer 
+{
+    margin: 20px 0 !important;
+}
+
+#submit-answer h3
+{
+    font-family: var(--font1);
+    font-size: 19px;
+}
+
+.submit-answer textarea
+{
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.01);
+    font-family: var(--font2);
+    letter-spacing: 1px;
+}
+
+.submit-answer textarea:focus
+{
+    box-shadow: -1px 0 5px -1px var(--primaryColor);
+}
+
+.submit-answer button
+{
+    background: var(--primaryColor);
+    color: #fff;
+    box-shadow: none !important;
+    padding: 5px 10px;
+    border-radius: 0;
+    margin-top: 10px;
+}
+
+.submit-answer button:hover
+{
+    color: #fff;
+}
+
+.box ul
+{
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    margin-left: 10px;
+}
+
+.box ul li
+{
+    margin-right: 10px;
+    background: rgba(0, 0, 0, 0.04);
+    font-size: 12px;
+    font-family: var(--font2);
+    padding: 5px 10px;
+    letter-spacing: 1px;
+}
+
+.box ul li a
+{
+    color: #333;
+    text-decoration: none;
+}
+
+#comment
+{
+    margin-top: -18px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#comment input
+{
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 20px;
+    width: 90%;
+    font-family: var(--font3);
+    font-size: 14px;
+}
+
+#comment input:focus
+{
+    box-shadow: -1px 0 5px -1px var(--primaryColor);
+}
+
+#comment .comment-btn
+{
+    width: 8%;
+    float: right;
+    margin-top: -40px;
+    height: 35px;
+    color: var(--primaryColor);
+    font-size: 22px;
+    box-shadow: none !important;
+}
+
+#all-comments .accordion .card
+{
+    box-shadow: none !important;
+    padding: 0;
+    margin-bottom: 0px;
+}
+
+
+#all-comments .accordion .card-body
+{
+    margin-top: -50px;
+}
+
+#all-comments .accordion .card-body:nth-child(1)
+{
+    margin-top: 0;
+}
+
+#all-comments .accordion .card button
+{
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    font-family: var(--font1);
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.no_comment
+{
+    background: #fff;
+    padding: 20px;
+    margin-top: -50px;
+    font-family: var(--font2);
+    letter-spacing: 1px;
+    font-size: 15px;
+}
+
+.option
+{
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    font-family: var(--font1);
+}
+
+.option button
+{
+    box-shadow: none !important;
+}
+
+.modal-title, .modal-body
+{   
+    color: #333 !important;
+}
+
+.modal .close
+{
+    background: #fff !important;
+    color: #333 !important;
+}
+
+.modal-body input, .modal-body textarea
+{
+    border-radius: 0;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.03);
+    border: none;
+    box-shadow: none !important;
+    font-family: var(--font2);
+    margin: 10px 0;
+}
+
+.modal-body input:focus, .modal-body textarea:focus
+{
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.modal-body textarea
+{
+    height: 100px;
+}
+
+.modal-body button
+{
+    float: right;
+    margin-top: 50px;
+    border-radius: 0;
+}
+
+
+.modal-body button
+{
+    background: var(--primaryColor);
+    color: #fff;
+    box-shadow: none !important;
+    border: none;
+    padding: 10px 20px;
+    font-family: var(--font2);
+}
+
+.modal-body button:hover
+{
+    color: #fff;
+}

@@ -1,0 +1,172 @@
+{% extends 'MainApp/layout.html' %}
+
+{% block content %}
+
+<!-- ---------------- Search ---------------- -->
+
+<section id="search">
+    <div class="container search">
+        <form action="/search/query/" method="GET">
+            <input type="search" name="search" value="{{request.GET.search }}" placeholder="Search">
+            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </form>
+    </div>
+</section>
+
+{% if messages %}
+<div class="container">
+    {% for msg in messages %}
+    <div class="my-4 alert alert-{{ msg.tags }} alert-dismissible fade show" id="main-alert" role="alert">{{ msg }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
+
+
+<!-- ---------------- Main ---------------- -->
+<section id="main" class="mt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+                {% if found == False %}
+                <h1 class="display-4 text-secondary text-center my-5"
+                    style="font-size: 37px; font-family: var(--font1);">No Results Found!</h1>
+                {% endif %}
+
+                {% for question in question_obj %}
+                <div class="card box">
+                    <div class="row">
+                        <div class="col-md-1 profile">
+                            <div class="media">
+                                <a href="profile/{{question.user.username}}"><img
+                                        src="/media/{{question.user.user_img}}"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-11 content">
+                            {% if question.title|slice:"-1:" == "?" %}
+                            <h1><a href="/{{question.url}}/">{{question.title}}</a></h1>
+                            {% else %}
+                            <h1><a href="/{{question.url}}/">{{question.title}} ?</a></h1>
+                            {% endif %}
+                            <p>{{question.description}}</p>
+                            <!-- <div class="upvote">
+                                <button title="Like"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <span
+                                        class="likes">100</span></button>
+                            </div> -->
+                            <div class="detail">
+                                <div class="list">
+                                    {% if question.answer_length == 0 %}
+                                    <div class="answers">{{question.answer_length}} Answer</div>
+                                    {% elif question.answer_length < 10 %}
+                                    <div class="answers">0{{question.answer_length}} Answer</div>
+                                    {% elif question.answer_length > 10 %}
+                                    <div class="answers">{{question.answer_length}} Answers</div>
+                                    {% endif %}
+
+                                    <div class="views"><i class="fa fa-eye" aria-hidden="true"></i> {{question.views}}
+                                    </div>
+                                    <div class="posted-at"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        {{question.date_posted}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- ---------------- Pagination ---------------- -->
+                {% if page != "search" %}
+                <div id="pagination" class="mt-5 mb-4">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            {% if question_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ question_obj.previous_page_number }}"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i></a></li>
+                            {% endif %}
+
+
+                            <span class="current">
+                                <li class="page-item"><a class="page-link link-active"
+                                        href="?page={{ question_obj.number }}">{{ question_obj.number }}</a></li>
+                            </span>
+
+                            {% if question_obj.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ question_obj.next_page_number }}"><i class="fa fa-angle-right"
+                                        aria-hidden="true"></i></a></li>
+
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ question_obj.paginator.num_pages }}">Last</a></li>
+                            {% endif %}
+
+                        </ul>
+                    </nav>
+                </div>
+                {% else %}
+                {% if found %}
+                <div id="pagination" class="mt-5 mb-4">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            {% if question_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?search={{request.GET.search }}&page=1">First</a></li>
+                            <li class="page-item"><a class="page-link"
+                                    href="?search={{request.GET.search }}&page={{ question_obj.previous_page_number }}"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i></a></li>
+                            {% endif %}
+
+
+                            <span class="current">
+                                <li class="page-item"><a class="page-link link-active"
+                                        href="?search={{request.GET.search }}&page={{ question_obj.number }}">{{ question_obj.number }}</a></li>
+                            </span>
+
+                            {% if question_obj.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                    href="?search={{request.GET.search }}&page={{ question_obj.next_page_number }}"><i class="fa fa-angle-right"
+                                        aria-hidden="true"></i></a></li>
+
+                            <li class="page-item"><a class="page-link"
+                                    href="?search={{request.GET.search }}&page={{ question_obj.paginator.num_pages }}">Last</a></li>
+                            {% endif %}
+
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+                {% endif %}
+
+            </div>
+
+            <!-- ---------------- Info ---------------- -->
+            <div class="col-md-3">
+                <div class="info">
+                    <b>The web’s community of communities</b>
+                    <ul>
+                        <li>Discus Questions © 2019</li>
+                        <li><a href="">About</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    $("#notification").click(() => {
+        $("#noti-box").toggle();
+    });
+</script>
+{% endblock %}
