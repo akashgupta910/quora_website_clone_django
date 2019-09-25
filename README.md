@@ -2,7 +2,7 @@
 A app where you can ask questions and answer the asked questions. this is like Quora website made with Django framework.
 ##### To run locally, do the usual:
 
-##### 1. Install python 3.6 or greater 
+##### 1. Create Python 3.6 virtualenv
                 
 ##### 2. Install dependencies:
 ```
