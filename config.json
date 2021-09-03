@@ -1,0 +1,14 @@
+{
+  "EMAIL_PARAMS":
+  {
+    "EMAIL_HOST_USER": "checkjust148@gmail.com",
+    "EMAIL_HOST_PASSWORD": "123Pass."
+  },
+
+  "PARAMS":
+  {
+    "NO_OF_POSTS_PER_PAGE": 10,
+    "IPDATA_API_KEY": "b4a9bd35fc29e7fa3740944518097146f21c562798d0de2b18a3049c",
+    "DOMAIN_URL": "http://127.0.0.1:8000"
+  }
+}

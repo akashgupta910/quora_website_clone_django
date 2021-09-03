@@ -1,0 +1,704 @@
+{% extends 'MainApp/layout.html' %}
+
+{% block style %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'MainApp/css/account.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<!-- start userprofile -->
+
+<section class="user-profile">
+    <div class="card box text-center">
+
+        <div class="user-details">
+
+            <div id="setting">
+                <div class="dropdown">
+                    <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item btn-primary" href="{% url 'forget_pass_page' %}">Change password</a>
+                        <a class="dropdown-item btn-danger" href="/deleteaccount/{{data.id}}">Delete Account</a>
+                    </div>
+                </div>
+            </div>
+
+            <h2>{{ data.name }}</h2>
+            <h3>{{ data.username }}</h3>
+            <p class="desc">{{ data.description }}</p>
+
+            <p class="location"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ data.location }}</p>
+            {% if data.show_email %}
+
+            <p class="email"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ data.email }}</p>
+            {% endif %}
+
+            <!-- start Edit Profile trigger modal -->
+            <button type="button" class="btn mt-2" data-toggle="modal" data-target="#exampleModal">
+                Edit Profile
+            </button>
+            <!-- End Edit Profile trigger modal -->
+
+            <!-- start Edit Profile Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Your Profile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                          <!-- start Edit Profile Form -->
+                            <form action="/editprofile/" method="POST">
+                                {% csrf_token %}
+                                <div style="display: none;" class="alert alert-warning form-alert" role="alert">
+                                    <span id="form-alert"></span>
+                                </div>
+                                <input type="text" name="name" id="save-name" placeholder="Name" value="{{ data.name }}"
+                                    class="form-control">
+                                <textarea name="about-user" id="save-desc" rows="3" class="form-control"
+                                    placeholder="Wite about yourself">{{data.description}}</textarea>
+                                <input type="text" name="location" id="save-location" value="{{ data.location }}"
+                                    placeholder="Location" class="form-control">
+                                <div class="custom-control float-left my-2 custom-switch">
+                                    <input type="checkbox" name="show_email" class="custom-control-input"
+                                        id="customSwitch1">
+                                    <label class="custom-control-label" for="customSwitch1">Show Email Address to
+                                        Public</label>
+                                </div>
+                                <button type="submit" class="btn" id="save-btn">Save</button>
+                            </form>
+                            <!-- End Edit Profile Form -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Edit Profile modal -->
+
+        </div>
+
+        <div class="user-img">
+            <img src="/media/{{ data.user_img }}" class="card-img-top">
+            <div class="user-img-inp">
+
+              <!-- start upload profile picture form -->
+                <form action="/upload/" enctype="multipart/form-data" method="POST" id="profile-img-form">
+                    {% csrf_token %}
+                    <input type="file" id="profile-img-inp" onchange="SubmitForm()" name="img" style="display: none;">
+                    <button title="change profile" type="button" id="btn-change-profile"><i class="fa fa-file-image-o"
+                            aria-hidden="true"></i></button>
+                </form>
+                <!-- end upload profile picture form -->
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- End user profile -->
+
+<!-- start flash messages -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 m-auto mb-0" id="alerts-msg">
+            {% if messages %}
+            <div class="container">
+                {% for msg in messages %}
+                <div class="my-4 alert alert-{{ msg.tags }} alert-dismissible fade show" id="main-alert" role="alert"
+                    style="box-shadow: -1px 0 7px 6px rgba(0, 0, 0, 0.1);">
+                    {{ msg }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- End flash messages -->
+
+
+<!-- alerts -->
+<div id="alerts">
+    <div class="container">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span id="alert">How </span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- start Main  -->
+<section id="main" class="mt-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+              <!-- start Add Question  -->
+                <div class="add-Question">
+                    <div class="card box mt-4">
+                        <div class="card-header">
+                            <h1>Add Question</h1>
+                        </div>
+
+                        <!-- start Add Question form -->
+                        <form action="/addquestion/" method="POST">
+                            {% csrf_token %}
+                            <div class="field">
+                                <h3>Title</h3>
+                                <input type="text" name="title" id="title" autocomplete="off" class="form-control"
+                                    placeholder="Question Title">
+                                <p>Question in one sentence and Question must starts with What, How, etc</p>
+                            </div>
+
+                            <div class="field">
+                                <input type="text" name="url" id="url" style="display: none;">
+                            </div>
+
+                            <div class="field">
+                                <h3 style="margin-top: 36px;">Description</h3>
+                                <textarea name="desc" id="desc" class="form-control"
+                                    placeholder="Desciption of your Question" rows="4"></textarea>
+                                <p>optional</p>
+                            </div>
+
+                            <div class="field">
+                                <h3 style="margin-top: 36px;">Category</h3>
+                                <div class="categories">
+                                    <input type="text" name="category" id="category-input" style="display: none;">
+                                    <ul>
+                                        <li class="category" id="Graphic Design">Graphic Design</li>
+                                        <li class="category" id="Technology">Technology</li>
+                                        <li class="category" id="Gadgets">Gadgets</li>
+                                        <li class="category" id="Education">Education</li>
+                                        <li class="category" id="Computers">Computers</li>
+                                        <li class="category" id="Nature">Nature</li>
+                                        <li class="category" id="Cars">Cars</li>
+                                        <li class="category" id="Animals">Animals</li>
+                                        <li class="category" id="History">History</li>
+                                        <li class="category" id="Fashion">Fashion</li>
+                                        <li class="category" id="Travel">Travel</li>
+                                        <li class="category" id="Insects">Insects</li>
+                                        <li class="category" id="Photography">Photography</li>
+                                        <li class="category" id="Health & Fitness">Health & Fitness</li>
+                                        <li class="category" id="Skills">Skills</li>
+                                        <li class="category" id="Web Development">Web Development</li>
+                                        <li class="category" id="Web Designing">Web Designing</li>
+                                        <li class="category" id="Programming">Programming</li>
+                                        <li class="category" id="Places">Places</li>
+                                    </ul>
+                                </div>
+                                <p class="ml-3">Select a topic that best fits your question. Minimum 1
+                                    and maximum 5</p>
+                            </div>
+
+                            <div class="field">
+                                <h3 style="margin-top: 36px;" class="mb-3">Tags</h3>
+                                <input type="text" id="tags" name="tags" autocomplete="off" placeholder="Tags"
+                                    class="form-control">
+                                <p class="mb-4">Tagging will helps others to easily find your question.tags.
+                                    Seperate Tags using comma ( , ).</p>
+                            </div>
+                            <button type="submit" class="mb-3 mt-2" id="add-btn">Add Question</button>
+                        </form>
+                        <!-- End Add Question Form -->
+
+                    </div>
+                </div>
+                <!-- End Add Question -->
+
+
+                <!-- start length of Question -->
+                {% if ques_length == 1 %}
+                <h6 class="text-muted">{{ques_length}} Question</span></h6>
+                {% else %}
+                <h6 class="text-muted">{{ques_length}} Questions</span></h6>
+                {% endif %}
+                <!-- end length of Question -->
+
+
+                <!-- start Questions -->
+                {% for question in questions %}
+                <div class="card box">
+                    <div class="row">
+                        <div class="col-md-1 profile">
+                            <div class="media">
+                                <a href=""><img src="/media/{{question.user.user_img}}"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-11 content">
+                            {% if question.title|slice:"-1:" == "?" %}
+                            <h1 class="pr-4"><a href="/{{question.url}}/">{{question.title}}</a></h1>
+                            {% else %}
+                            <h1 class="pr-4"><a href="/{{question.url}}/">{{question.title}} ?</a></h1>
+                            {% endif %}
+                            <p>{{question.description}}</p>
+                            <div class="detail">
+                                <div class="list">
+                                    {% if question.answer_length == 0 %}
+                                    <div class="answers">{{question.answer_length}} Answer</div>
+                                    {% elif question.answer_length < 10 %}
+                                    <div class="answers">0{{question.answer_length}} Answer</div>
+                                    {% elif question.answer_length > 10 %}
+                                    <div class="answers">{{question.answer_length}} Answers</div>
+                                    {% endif %}
+
+                                    <div class="views"><i class="fa fa-eye" aria-hidden="true"></i> {{question.views}}
+                                    </div>
+                                    <div class="posted-at"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        {{question.date_posted}}
+                                    </div>
+                                </div>
+
+                                <!--  Option  -->
+                                <div class="option">
+                                    <div class="dropdown">
+                                        <button class="btn text-muted" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-bars" aria-hidden="true"></i>
+                                        </button>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                                            <!-- start Edit Question trigger modal -->
+                                            <a class="dropdown-item btn-primary" data-toggle="modal"
+                                                data-target="#exampleModalLong{{forloop.counter}}" href="#">Edit</a>
+                                            <!-- end Edit Question trigger modal -->
+
+                                            <!-- start Delete Question trigger modal -->
+                                            <a class="dropdown-item btn-danger" data-toggle="modal"
+                                                data-target="#exampleModal{{forloop.counter}}" href="">Delete</a>
+                                            <!-- end Delete Question trigger modal -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end Questions -->
+
+
+                <!-- start Edit Question Modal-->
+                <div class="modal fade" id="exampleModalLong{{forloop.counter}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Edit Question</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                              <!-- start Edit Question Form -->
+                                <form action="/editquestion/{{question.url}}" method="POST">
+                                    {% csrf_token %}
+                                    <div style="display: none;" id="editQuesAlert{{forloop.counter}}"
+                                        class="px-3 py-3 mb-3 alert-warning form-alert" role="alert">
+
+                                    </div>
+                                    <input type="text" name="title" id="save-name"
+                                        placeholder="Enter Your Question Title" value="{{question.title}}"
+                                        class="form-control editQuesTitle{{forloop.counter}}">
+                                    <textarea name="desc" id="save-desc" rows="3"
+                                        class="form-control editQuesDesc{{forloop.counter}}"
+                                        placeholder="Enter your Question Desciption">{{question.description}}</textarea>
+
+                                    <button type="submit" class="btn mt-0" id="{{forloop.counter}}"
+                                        onclick="EditQuestionValidation(this.id)">Save</button>
+                                </form>
+                                <!-- end Edit Question Form -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end Edit Question Modal-->
+
+
+                <!-- start Delete Question Modal  -->
+                <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Are You sure want to delete ?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p style="font-family: var(--font1)" class="text-muted">" {{question.title}} "</p>
+                            </div>
+                            <div class="modal-footer">
+
+                              <!-- start Delete Question Form -->
+                                <form action="/deletequestion/{{question.url}}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                </form>
+                                <!-- end Delete Question Form -->
+
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end Delete Question Modal -->
+
+
+                {% endfor %}
+            </div>
+
+            <!-- start  Website Seo Page  -->
+            <div class="col-md-3">
+                <div class="info" style="margin-top: 28px;">
+                    <b>The web’s community of communities</b>
+                    <ul>
+                        <li>Discus Questions © 2019</li>
+                        <li><a href="">About</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- End Website Seo Page -->
+
+</section>
+<!-- End Main -->
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+    (function Category() {
+        let category = [];
+        let category_input = document.getElementById('category-input');
+
+        let categories = document.getElementsByClassName('category');
+        for (let i = 0; i < categories.length; i++) {
+            categories[i].addEventListener('click', () => {
+
+                if (category.includes(categories[i].id)) {
+
+                    let cateIndex = category.indexOf(categories[i].id);
+                    category.splice(cateIndex, 1);
+                    category_input.value = category;
+
+                    categories[i].style.backgroundColor = "rgba(0, 0, 0, 0.04)";
+                    categories[i].style.color = "#333";
+                    categories[i].style.transition = "0.2s";
+                }
+
+                else {
+                    if (category.length < 5) {
+                        category.push(categories[i].id);
+                        category_input.value = category;
+
+                        categories[i].style.backgroundColor = "#8B78E6";
+                        categories[i].style.color = "#fff";
+                        categories[i].style.transition = "0.2s";
+                    }
+                }
+            });
+        }
+    }())
+
+        (function Validation() {
+
+            document.getElementById('add-btn').addEventListener('click', (event) => {
+
+                // wh_words
+                let wh_words = ["what", "which", "who", "whose", "whom", "when", "why", "how", "are", "is", "am"];
+                let title = false;
+
+                // get the value from all input field
+                let titleValue = document.getElementById("title").value;
+                let descValue = document.getElementById("desc").value;
+                let categoryValue = document.getElementById("category-input").value;
+                let tagsValue = document.getElementById("tags").value;
+
+                // Alert
+                let alert_msg = document.getElementById("alert");
+                let alerts = document.getElementById("alerts");
+
+                // split title and check wh words includes or not
+                let split_title = titleValue.split(" ");
+                for (let i = 0; i < wh_words.length; i++) {
+                    if (split_title[0].toLowerCase() == wh_words[i].toLowerCase()) {
+                        title = true;
+                    }
+                }
+
+                // Title Validation
+                if (titleValue == "") {
+                    alert_msg.innerText = "Please Enter the Question Title.";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (!title) {
+                    alert_msg.innerText = "This is not a Question! Please Enter Correctly.";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (titleValue.length > 110) {
+                    alert_msg.innerText = "Question is too long!";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (titleValue.slice(-1) == "?") {
+                    alert_msg.innerText = "Please remove question marks from last.";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                // Description Validation
+                else if (descValue.length > 400) {
+                    alert_msg.innerText = "Description is too long!";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                // Category Validation
+                else if (categoryValue == "") {
+                    alert_msg.innerText = "Please choose at lease one Category.";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                // Tags Validation
+                else if (tagsValue == "") {
+                    alert_msg.innerText = "Please Enter at least one tag.";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (tagsValue.length > 100) {
+                    alert_msg.innerText = "Dont't use too many tags.";
+                    alerts.style.display = "block";
+                    event.preventDefault();
+                }
+
+                else {
+                    alert_msg.innerText = "";
+                    alerts.style.display = "none";
+                }
+
+            });
+        }())
+</script>
+
+<script>
+        (function EditFormValidation() {
+            document.getElementById('save-btn').addEventListener('click', (event) => {
+
+                // get the value from all input field
+                let name = document.getElementById("save-name").value;
+                let desc = document.getElementById("save-desc").value;
+                let location = document.getElementById("save-location").value;
+                let name_regex = /^[A-Za-z ]{5,20}$/i;
+
+                // Alert
+                let alert = document.getElementsByClassName('form-alert');
+                let alert_msg = document.getElementById("form-alert");
+
+                // Name validation
+                if (name == "") {
+                    alert_msg.innerText = "Please Enter Your Name.";
+                    alert[0].style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (name.length < 5) {
+                    alert_msg.innerText = "Name must contain at least 5 characters.";
+                    alert[0].style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (name.length > 20) {
+                    alert_msg.innerText = "Name must be less than 20 characters.";
+                    alert[0].style.display = "block";
+                    event.preventDefault();
+                }
+
+                else if (!(name_regex.test(name))) {
+                    alert_msg.innerText = "Name must be only contain alphabets.";
+                    alert[0].style.display = "block";
+                    event.preventDefault();
+                }
+
+                // Description Validation
+                else if (desc.length > 250) {
+                    alert_msg.innerText = "Description must be between 250 characters.";
+                    alert[0].style.display = "block";
+                    event.preventDefault();
+                }
+
+                // Location Validation
+                else if (location.length > 30) {
+                    alert_msg.innerText = "Location is too long.";
+                    alert[0].style.display = "block";
+                    event.preventDefault();
+                }
+
+                else {
+                    alert_msg.innerText = "";
+                    alert[0].style.display = "none";
+                }
+
+            });
+        }())
+
+        (function Topics() {
+            let topics_array = [];
+            let topics_inp = document.getElementById("topics_inp");
+
+            let topics = document.getElementsByClassName('topics');
+            for (let i = 0; i < topics.length; i++) {
+                topics[i].addEventListener('click', () => {
+
+                    if (topics_array.includes(topics[i].id)) {
+
+                        let topics_index = topics_array.indexOf(topics[i].id);
+                        topics_array.splice(topics_index, 1);
+                        topics_inp.value = topics_array;
+
+                        topics[i].style.backgroundColor = "rgba(0, 0, 0, 0.04)";
+                        topics[i].style.color = "#333";
+                        topics[i].style.transition = "0.3s";
+                    }
+
+                    else {
+                        topics_array.push(topics[i].id);
+                        topics_inp.value = topics_array;
+
+                        topics[i].style.backgroundColor = "#8B78E6";
+                        topics[i].style.color = "#fff";
+                        topics[i].style.transition = "0.3s";
+                    }
+                });
+            }
+        }())
+</script>
+
+<script>
+    $('#btn-change-profile').click(() => {
+        $('#profile-img-inp').click();
+    })
+
+    function SubmitForm() {
+        $('#profile-img-form').submit();
+    }
+
+    (function Url() {
+        let title = document.getElementById("title");
+        let url_inp = document.getElementById("url");
+
+        title.addEventListener('keyup', () => {
+            let url_string = "";
+            split_title = title.value.trim().split(" ");
+            for (let i = 0; i < split_title.length; i++) {
+                if (!(split_title[i] == "?")) {
+                    url_string += split_title[i] + "-";
+                }
+            }
+            url_inp.value = url_string.slice(0, -1).toLowerCase();
+        })
+    }())
+
+    function EditQuestionValidation(id) {
+
+        // wh_words
+        let wh_words = ["what", "which", "who", "whose", "whom", "when", "why", "how", "are", "is", "am"];
+        let title = false;
+
+        // get the value from all input field
+        let quesTitle = document.getElementsByClassName("editQuesTitle" + id)
+        let quesDescription = document.getElementsByClassName("editQuesDesc" + id)
+
+        // Alert
+        let alert_msg = document.getElementById("editQuesAlert" + id);
+
+        for (let i = 0; i < quesTitle.length; i++) {
+
+            // split title and check wh words includes or not
+            let split_title = quesTitle[i].value.split(" ");
+            for (let i = 0; i < wh_words.length; i++) {
+                if (split_title[0].toLowerCase() == wh_words[i].toLowerCase()) {
+                    title = true;
+                }
+            }
+
+            // Title Validation
+            if (quesTitle[i].value == "") {
+                alert_msg.innerText = "Please Enter your Question Title"
+                alert_msg.style.display = "block";
+                event.preventDefault();
+            }
+
+            else if (!title) {
+                alert_msg.innerText = "This is not a Question! Please Enter Correctly.";
+                alert_msg.style.display = "block";
+                event.preventDefault();
+            }
+
+            else if (quesTitle[i].value.length > 110) {
+                alert_msg.innerText = "Question is too long!";
+                alert_msg.style.display = "block";
+                event.preventDefault();
+            }
+
+            else if (quesTitle[i].value.slice(-2, -1) == "?") {
+                alert_msg.innerText = "Do not enter too much Questions marks.";
+                alert_msg.style.display = "block";
+                event.preventDefault();
+            }
+
+            else {
+                for (let i = 0; i < quesDescription.length; i++) {
+                    // Description Validation
+                    if (quesDescription[i].value.length > 400) {
+                        alert_msg.innerText = "Description is too long!";
+                        alert_msg.style.display = "block";
+                        event.preventDefault();
+                    }
+
+                    else {
+                        alert_msg.innerText = "";
+                        alert_msg.style.display = "none";
+                    }
+                }
+            }
+
+        }
+
+    }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,150 @@
+body
+{
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('/media/Images/bg_2.jpg');
+    background-size: contain;
+    background-position: center;
+    height: 100vh;
+}
+
+#login .card, #signup .card
+{
+    margin-top: 8em;
+    text-align: center;
+    padding: 30px;
+    border: none;
+    border-radius: 0;
+    box-shadow: -1px 0 7px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2em;
+}
+
+#signup .card
+{
+    margin-top: 3em;
+    position: relative;
+}
+
+#login .card h1, #signup .card h1
+{
+    font-family: var(--font1);
+    color: var(--primaryColor);
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#login .card .desc, #signup .card .desc
+{
+    font-family: var(--font1);
+    color: rgba(0, 0, 0, 0.6);
+    margin-top: 5px;
+}
+
+#login .card h3, #signup .card h3
+{
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+} 
+
+#login .card input, #signup .card input
+{
+    margin-bottom: 15px;
+    border-radius: 0;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.03);
+    border: none;
+    box-shadow: none !important;
+    font-family: var(--font2);
+    padding-right: 2.7em;
+}
+
+#login .card a, #signup .card a
+{
+    color: rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+    font-size: 15px;
+}
+
+#login .card button, #signup .card button
+{
+    background: var(--primaryColor);
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+#login .card .field, #signup .card .field
+{
+    position: relative;
+}
+
+#login .card .field .fa, #signup .card .fa
+{
+    position: absolute;
+    font-size: 22px;
+    color: #EA7773;
+    right: 3%;
+    top: 17%;
+    cursor: pointer;
+    display: none;
+}
+
+#login .card .field .alert, #signup .card .alert
+{
+    text-align: left;
+    color: #EA7773;
+    font-size: 14px;
+    font-family: var(--font2);
+    letter-spacing: 1px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+    margin-left: 6px;
+    display: none;
+}
+
+#login .card .create-account, #signup .card .account
+{
+    color: var(--primaryColor);
+}
+
+#login .card .create-account:hover, #signup .card .account:hover
+{
+    border-bottom: 1px solid var(--primaryColor);
+}
+
+#login .card .seo-desc, #signup .card .seo-desc
+{
+    font-size: 13px !important;
+    color: rgba(0, 0, 0, 0.7);
+    position: relative;
+}
+
+#login .card a, #signup .card a
+{
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0 3px;
+    font-weight: bold;
+}
+
+#login .card .seo-desc::before, #signup .card .seo-desc::before
+{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    left: 0;
+    margin-top: -18px;
+}
+
+#alerts-msg 
+{
+    position: absolute;
+    bottom: 2%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 10;
+}

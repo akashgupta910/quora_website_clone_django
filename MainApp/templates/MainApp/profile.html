@@ -1,0 +1,101 @@
+{% extends 'MainApp/layout.html' %}
+
+{% block style %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'MainApp/css/account.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="user-profile">
+    <div class="card box text-center">
+        <div class="user-details">
+            <h2>{{ data.name }}</h2>
+            <h3>{{ data.username }}</h3>
+            <p class="desc">{{ data.description }}</p>
+            <p class="location"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ data.location }}</p>
+            {% if data.show_email %}
+            <p class="email"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ data.email }}</p>
+            {% endif %}
+        </div>
+        <div class="user-img">
+            <img src="/media/{{ data.user_img }}" class="card-img-top">
+        </div>
+    </div>
+</section>
+
+
+<!-- ---------------- Main ---------------- -->
+<section id="main" class="mt-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                {% if ques_length == 1 %}
+                <h6 class="text-muted">{{ques_length}} Question</span></h6>
+                {% else %}
+                <h6 class="text-muted">{{ques_length}} Questions</span></h6>
+                {% endif %}
+
+                {% for question in questions %}
+                <div class="card box">
+                    <div class="row">
+                        <div class="col-md-1 profile">
+                            <div class="media">
+                                <a href="#"><img src="/media/{{question.user.user_img}}"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-11 content">
+                            {% if question.title|slice:"-1:" == "?" %}
+                            <h1><a href="/{{question.url}}/">{{question.title}}</a></h1>
+                            {% else %}
+                            <h1><a href="/{{question.url}}/">{{question.title}} ?</a></h1>
+                            {% endif %}
+                            <p>{{question.description}}</p>
+                            <div class="upvote">
+                                <!-- <form action="/question/like/" method="POST">
+                                        {% csrf_token %}
+                                    <button type="submit" id="{{question.url}}" onclick="AjaxLike(this.id)" title="Like"><i class="fa fa-thumbs-o-up like-btn" aria-hidden="true"></i>
+                                        <span class="likes">2</span></button>
+                                </form> -->
+                            </div>
+                            <div class="detail">
+                                <div class="list">
+                                    {% if question.answer_length == 0 %}
+                                    <div class="answers">{{question.answer_length}} Answer</div>
+                                    {% elif question.answer_length < 10 %}
+                                    <div class="answers">0{{question.answer_length}} Answer</div>
+                                    {% elif question.answer_length > 10 %}
+                                    <div class="answers">{{question.answer_length}} Answers</div>
+                                    {% endif %}
+                                    <div class="views"><i class="fa fa-eye" aria-hidden="true"></i>
+                                        {{question.views}}
+                                    </div>
+                                    <div class="posted-at"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        {{question.date_posted}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="info" style="margin-top: 35px;">
+                    <b>The web’s community of communities</b>
+                    <ul>
+                        <li>Discus Questions © 2019</li>
+                        <li><a href="">About</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
